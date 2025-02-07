@@ -115,9 +115,9 @@ function minify_settings_submit(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_process_html()
+ * Implements hook_preprocess_HOOK()
  */
-function minify_process_html(&$variables) {
+function minify_preprocess_page(&$variables) {
   global $theme;
   $theme_default = config_get('system.core', 'theme_default');
 
@@ -126,10 +126,8 @@ function minify_process_html(&$variables) {
   if (intval($minify_html) && $theme == $theme_default) {
     /* Constant used as replacement tag key in global placeholders array */
     define('REPLACEMENT_HASH', 'MINIFYHTML' . md5($_SERVER['REQUEST_TIME']));
-    /* Get active theme regions */
-    $visible_theme_region = system_region_list($theme_default, REGIONS_ALL);
     /* Add page region to array */
-    $visible_theme_region = array_merge(array('page' => 'Page', 'page_top' => 'Page top', 'page_bottom' => 'Page bottom'), $visible_theme_region);
+    $visible_theme_region = array_merge(array('page' => 'Page', 'page_top' => 'Page top', 'page_bottom' => 'Page bottom'));
 
     /* Prase and check if region is exist then minify HTML */
     foreach ($visible_theme_region as $key => $value) {
